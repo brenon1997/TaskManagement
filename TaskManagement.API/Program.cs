@@ -2,6 +2,7 @@ using TaskManagement.Application.Services;
 using TaskManagement.Application.UseCases.Task.GetAll;
 using TaskManagement.Application.UseCases.Task.GetById;
 using TaskManagement.Application.UseCases.Task.Register;
+using TaskManagement.Application.UseCases.Task.Update;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddSingleton<TaskService>();
 builder.Services.AddTransient<RegisterTaskUseCase>();
 builder.Services.AddTransient<GetAllTasksUseCase>();
 builder.Services.AddTransient<GetTaskByIdUseCase>();
+builder.Services.AddTransient<UpdateTaskUseCase>();
 
 var app = builder.Build();
 

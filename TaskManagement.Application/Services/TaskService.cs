@@ -21,4 +21,21 @@ public class TaskService
     {
         return _tasks.FirstOrDefault(t => t.Id == id);
     }
+
+    public bool Update(TaskModel updatedTask)
+    {
+        var existingTask = _tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
+        if (existingTask == null)
+        {
+            return false;
+        }
+
+        existingTask.Name = updatedTask.Name;
+        existingTask.Description = updatedTask.Description;
+        existingTask.Priority = updatedTask.Priority;
+        existingTask.DueDate = updatedTask.DueDate;
+        existingTask.Status = updatedTask.Status;
+
+        return true;
+    }
 }

@@ -2,6 +2,7 @@
 using TaskManagement.Application.UseCases.Task.GetAll;
 using TaskManagement.Application.UseCases.Task.GetById;
 using TaskManagement.Application.UseCases.Task.Register;
+using TaskManagement.Application.UseCases.Task.Update;
 using TaskManagement.Communication.Requests;
 using TaskManagement.Communication.Responses;
 
@@ -14,18 +15,20 @@ public class TasksController : ControllerBase
     private readonly RegisterTaskUseCase _registerTaskUseCase;
     private readonly GetAllTasksUseCase _getAllTasksUseCase;
     private readonly GetTaskByIdUseCase _getTaskByIdUseCase;
+    private readonly UpdateTaskUseCase _updateTaskUseCase;
 
-    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase, GetTaskByIdUseCase getTaskByIdUseCase)
+    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase, GetTaskByIdUseCase getTaskByIdUseCase, UpdateTaskUseCase updateTaskUseCase)
     {
         _registerTaskUseCase = registerTaskUseCase;
         _getAllTasksUseCase = getAllTasksUseCase;
         _getTaskByIdUseCase = getTaskByIdUseCase;
+        _updateTaskUseCase = updateTaskUseCase;
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(ResponseRegisterTaskJson), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseErrorsJson), StatusCodes.Status400BadRequest)]
-    public IActionResult RegisterTask([FromBody] RequestRegisterTaskJson request)
+    public IActionResult RegisterTask([FromBody] RequestTaskJson request)
     {
         if (request == null)
         {
@@ -64,6 +67,24 @@ public class TasksController : ControllerBase
             return NotFound();
         }
 
+        return Ok(response);
+    }
+    [HttpPut]
+    [Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseUpdateTaskJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseErrorsJson), StatusCodes.Status400BadRequest)]
+    public IActionResult Update([FromRoute] int id, [FromBody] RequestTaskJson request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+        ResponseUpdateTaskJson? response = _updateTaskUseCase.Execute(id, request);
+        if (response == null)
+        {
+            return NotFound();
+        }
         return Ok(response);
     }
 }

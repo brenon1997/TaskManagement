@@ -1,8 +1,9 @@
 ﻿using TaskManagement.Communication.Enums;
 
-namespace TaskManagement.Communication.Requests;
-public class RequestRegisterTaskJson
+namespace TaskManagement.Communication.Responses;
+public class ResponseUpdateTaskJson
 {
+    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public Priority Priority { get; set; }

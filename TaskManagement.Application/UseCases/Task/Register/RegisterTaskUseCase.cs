@@ -13,7 +13,7 @@ public class RegisterTaskUseCase
         _taskService = taskService;
     }
 
-    public ResponseRegisterTaskJson Execute(RequestRegisterTaskJson request)
+    public ResponseRegisterTaskJson Execute(RequestTaskJson request)
     {
         TaskModel task = new()
         {
