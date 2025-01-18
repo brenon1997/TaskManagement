@@ -1,9 +1,15 @@
+using TaskManagement.Application.Services;
+using TaskManagement.Application.UseCases.Task.Register;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<TaskService>();
+builder.Services.AddTransient<RegisterTaskUseCase>();
 
 var app = builder.Build();
 
