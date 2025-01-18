@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskManagement.Application.UseCases.Task.GetAll;
 using TaskManagement.Application.UseCases.Task.Register;
 using TaskManagement.Communication.Requests;
 using TaskManagement.Communication.Responses;
@@ -10,10 +11,12 @@ namespace TaskManagement.API.Controllers;
 public class TasksController : ControllerBase
 {
     private readonly RegisterTaskUseCase _registerTaskUseCase;
+    private readonly GetAllTasksUseCase _getAllTasksUseCase;
 
-    public TasksController(RegisterTaskUseCase registerTaskUseCase)
+    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase)
     {
         _registerTaskUseCase = registerTaskUseCase;
+        _getAllTasksUseCase = getAllTasksUseCase;
     }
 
     [HttpPost]
@@ -28,5 +31,20 @@ public class TasksController : ControllerBase
 
         ResponseRegisterTaskJson response = _registerTaskUseCase.Execute(request);
         return Created(string.Empty, response);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ResponseAllTasksJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public IActionResult GetAll()
+    {
+        ResponseAllTasksJson response = _getAllTasksUseCase.Execute();
+
+        if (!response.Tasks.Any())
+        {
+            return NoContent();
+        }
+
+        return Ok(response);
     }
 }

@@ -12,4 +12,8 @@ public class TaskService
         _tasks.Add(task);
         return task;
     }
+    public List<TaskModel> GetAll()
+    {
+        return _tasks;
+    }
 }
