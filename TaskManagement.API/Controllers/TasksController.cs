@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Application.UseCases.Task.GetAll;
+using TaskManagement.Application.UseCases.Task.GetById;
 using TaskManagement.Application.UseCases.Task.Register;
 using TaskManagement.Communication.Requests;
 using TaskManagement.Communication.Responses;
@@ -12,11 +13,13 @@ public class TasksController : ControllerBase
 {
     private readonly RegisterTaskUseCase _registerTaskUseCase;
     private readonly GetAllTasksUseCase _getAllTasksUseCase;
+    private readonly GetTaskByIdUseCase _getTaskByIdUseCase;
 
-    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase)
+    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase, GetTaskByIdUseCase getTaskByIdUseCase)
     {
         _registerTaskUseCase = registerTaskUseCase;
         _getAllTasksUseCase = getAllTasksUseCase;
+        _getTaskByIdUseCase = getTaskByIdUseCase;
     }
 
     [HttpPost]
@@ -43,6 +46,22 @@ public class TasksController : ControllerBase
         if (!response.Tasks.Any())
         {
             return NoContent();
+        }
+
+        return Ok(response);
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    [ProducesResponseType(typeof(ResponseTaskJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseErrorsJson), StatusCodes.Status404NotFound)]
+    public IActionResult Get([FromRoute] int id)
+    {
+        ResponseTaskJson? response = _getTaskByIdUseCase.Execute(id);
+
+        if (response == null)
+        {
+            return NotFound();
         }
 
         return Ok(response);

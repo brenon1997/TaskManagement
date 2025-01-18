@@ -16,4 +16,9 @@ public class TaskService
     {
         return _tasks;
     }
+
+    public TaskModel? GetById(int id)
+    {
+        return _tasks.FirstOrDefault(t => t.Id == id);
+    }
 }
