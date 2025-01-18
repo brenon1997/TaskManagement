@@ -38,4 +38,15 @@ public class TaskService
 
         return true;
     }
+
+    public bool Delete(int id)
+    {
+        var task = _tasks.FirstOrDefault(t => t.Id == id);
+        if (task == null)
+        {
+            return false;
+        }
+        _tasks.Remove(task);
+        return true;
+    }
 }

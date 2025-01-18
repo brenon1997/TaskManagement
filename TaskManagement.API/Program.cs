@@ -1,4 +1,5 @@
 using TaskManagement.Application.Services;
+using TaskManagement.Application.UseCases.Task.Delete;
 using TaskManagement.Application.UseCases.Task.GetAll;
 using TaskManagement.Application.UseCases.Task.GetById;
 using TaskManagement.Application.UseCases.Task.Register;
@@ -16,6 +17,7 @@ builder.Services.AddTransient<RegisterTaskUseCase>();
 builder.Services.AddTransient<GetAllTasksUseCase>();
 builder.Services.AddTransient<GetTaskByIdUseCase>();
 builder.Services.AddTransient<UpdateTaskUseCase>();
+builder.Services.AddTransient<DeleteTaskUseCase>();
 
 var app = builder.Build();
 

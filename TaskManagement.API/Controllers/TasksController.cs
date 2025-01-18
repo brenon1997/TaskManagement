@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskManagement.Application.UseCases.Task.Delete;
 using TaskManagement.Application.UseCases.Task.GetAll;
 using TaskManagement.Application.UseCases.Task.GetById;
 using TaskManagement.Application.UseCases.Task.Register;
@@ -16,13 +17,15 @@ public class TasksController : ControllerBase
     private readonly GetAllTasksUseCase _getAllTasksUseCase;
     private readonly GetTaskByIdUseCase _getTaskByIdUseCase;
     private readonly UpdateTaskUseCase _updateTaskUseCase;
+    private readonly DeleteTaskUseCase _deleteTaskByIdUseCase;
 
-    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase, GetTaskByIdUseCase getTaskByIdUseCase, UpdateTaskUseCase updateTaskUseCase)
+    public TasksController(RegisterTaskUseCase registerTaskUseCase, GetAllTasksUseCase getAllTasksUseCase, GetTaskByIdUseCase getTaskByIdUseCase, UpdateTaskUseCase updateTaskUseCase, DeleteTaskUseCase deleteTaskUseCase)
     {
         _registerTaskUseCase = registerTaskUseCase;
         _getAllTasksUseCase = getAllTasksUseCase;
         _getTaskByIdUseCase = getTaskByIdUseCase;
         _updateTaskUseCase = updateTaskUseCase;
+        _deleteTaskByIdUseCase = deleteTaskUseCase;
     }
 
     [HttpPost]
@@ -86,5 +89,19 @@ public class TasksController : ControllerBase
             return NotFound();
         }
         return Ok(response);
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseErrorsJson), StatusCodes.Status404NotFound)]
+    public IActionResult Delete([FromRoute] int id)
+    {
+        if(_deleteTaskByIdUseCase.Execute(id))
+        {
+            return NoContent();
+        }
+
+        return NotFound();
     }
 }
